@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-cn">
+
+<head>
+    <title>{{ title }}</title>
+    <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="/css/index.css"/>
+</head>
+
+<body>
+{% include "section/header.html" %}
+
+{% include "section/column-header.html" %}
+
+<div class="mb-30">
+
+    <div class="Documentation">
+        <div class="doc-nav">
+            <div class="Navigation left large">
+                {% if column.chapters %}
+                {% for chapter in column.chapters %}
+                {% for article in chapter.articles %}
+                <a href="/articles/{{ article.id }}" class="expandable item {% if article.id == id %}active{% endif %}">{{
+                    article.title }}</a>
+                {% endfor %}
+                {% endfor %}
+                {% else %}
+                {% for article in column.articles %}
+                <a href="/articles/{{ article.id }}" class="expandable item {% if article.id == id %}active{% endif %}">{{
+                    article.title }}</a>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="content">
+            <h1 class="Heading">{{ title}}</h1>
+            <div class="Markdown">
+                <html>
+                <body>
+                {{ content_html }}
+                </body>
+                </html>
+            </div>
+
+            <div class="flex mt-24">
+                {% if prev %}
+                <a class="PageLink prev" href="/articles/{{prev.id}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="icon"
+                         version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
+                         transform="matrix(-1,1.2246467991473532e-16,-1.2246467991473532e-16,-1,0,0)">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                    <div class="info">
+                        <div class="direction">上一篇</div>
+                        <div class="name">{{ prev.title }}</div>
+                    </div>
+                </a>
+                {% endif %}
+
+                {% if next %}
+                <a class="PageLink next" href="/articles/{{next.id}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="icon">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                    <div class="info">
+                        <div class="direction">下一篇</div>
+                        <div class="name">{{ next.title }}</div>
+                    </div>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="page-nav" style="display: none;">
+            <div class="Navigation right small">
+                <div class="contents">
+                    <svg preserveAspectRatio="xMidYMid meet" height="1em" width="1em" fill="none"
+                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round" stroke="currentColor" class="icon">
+                        <g>
+                            <line x1="21" y1="10" x2="7" y2="10"></line>
+                            <line x1="21" y1="6" x2="3" y2="6"></line>
+                            <line x1="21" y1="14" x2="3" y2="14"></line>
+                            <line x1="21" y1="18" x2="7" y2="18"></line>
+                        </g>
+                    </svg>
+                    <span>大纲</span>
+                </div>
+                <div id="pageNavItems">
+                    <!-- <a class="item" href="#示例">示例</a> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% include "section/footer.html" %}
+
+<script importance="low" src="/js/index.js"></script>
+</body>
+
+</html>

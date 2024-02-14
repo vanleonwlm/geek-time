@@ -1,0 +1,28 @@
+<div class="mb-16 pt-30 column-header" style="
+    background: no-repeat url({{column.background}}) top/1920px auto;
+    margin-top: -16rem;
+    height: 518px;
+        ">
+    <div style="max-width: 1125px;
+                margin: auto; 
+                display: grid;
+                grid-template-columns: auto auto;
+                position: relative;
+                ">
+        <div>
+            <h1>
+                <a href="/columns/{{ column.id }}" style="text-decoration: none; color: inherit;">
+                    {{ column.title }}
+                </a>
+            </h1>
+            <div><p>{{ column.subtitle }}</p></div>
+            <div class="mt-15">
+                <div><p>{{ column.author.name }} {{ column.author.intro }}</p></div>
+                <div><p>{{ column.tags }}</p></div>
+            </div>
+        </div>
+        <div>
+            <img src="{{ column.cover.transparent }}" style="width: 334px; height: 334px;">
+        </div>
+    </div>
+</div>

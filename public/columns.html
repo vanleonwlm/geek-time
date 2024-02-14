@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-cn">
+
+<head>
+    <title>极客时间</title>
+    <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="/css/index.css"/>
+</head>
+
+<body>
+{% include "section/header.html" %}
+
+<div class="container-1 mb-30">
+    <div class="content">
+        {% for column in columns %}
+        <article class="mb-20">
+            <div class="text-2 weight-6">{{ column.create_time }}</div>
+            <h2 class="title-3 mt-4">{{ column.title }}</h2>
+            <p class="small mt-6">{{ column.intro.substring(0, 200) + '...' }}</p>
+            <p class="mt-4"><a class="Link small" href="/columns/{{ column.id }}">查看专栏</a></p>
+        </article>
+        {% endfor %}
+    </div>
+</div>
+
+{% include "section/footer.html" %}
+
+<script importance="low" src="/js/index.js"></script>
+</body>
+
+</html>

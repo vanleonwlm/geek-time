@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-cn">
+
+<head>
+    <title>{{ title }}</title>
+    <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="/css/index.css"/>
+</head>
+
+<body>
+{% include "section/header.html" %}
+
+{% include "section/column-header.html" %}
+
+<div class="container-1 mb-30">
+    <div class="content">
+        <div class="min-column-header mb-16">
+            <h1>{{ title }}</h1>
+            <div><p>{{ subtitle }}</p></div>
+            <div class="mt-15">
+                <div><p>{{ author.name }} {{ author.intro }}</p></div>
+                <div><p>{{ tags }}</p></div>
+            </div>
+        </div>
+        <div class="text-2 weight-6">{{ create_time }}</div>
+        <div class="Markdown">
+            <html>
+            <body>
+            {{ intro_html }}
+            </body>
+            </html>
+        </div>
+
+        <div class="mt-20"></div>
+
+        {% if chapters.length > 0 %}
+        {% for chapter in chapters %}
+        <div class="chapter">
+            <div class="text-3 weight-6">{{ chapter.title }}</div>
+            {% for article in chapter.articles %}
+            <p class="mt-4"><a class="Link small" href="/articles/{{ article.id }}">{{ article.title }}</a></p>
+            {% endfor %}
+            <div class="mt-5"></div>
+        </div>
+        {% endfor %}
+
+        {% else %}
+        {% for article in articles %}
+        <div class="article">
+            <p class="mt-4"><a class="Link small" href="/articles/{{ article.id }}">{{ article.title }}</a></p>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+    </div>
+</div>
+
+{% include "section/footer.html" %}
+</body>
+
+</html>
