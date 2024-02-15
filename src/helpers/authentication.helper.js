@@ -29,6 +29,11 @@ module.exports = {
         }
 
         const cookies = req.cookies;
+        if (!cookies) {
+            callback(null, false);
+            return;
+        }
+
         token = cookies.token;
         if (!token) {
             callback(null, false);
