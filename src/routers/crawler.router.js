@@ -1,7 +1,10 @@
+// 我之前是 super vip，所有专栏都可以爬，这里没考虑没有购买专栏的情况，可能会有问题：）
+
 const express = require('express');
 const router = express.Router();
 const env = require('../configs/base.config');
 const refer = env.geekTime.home;
+const home = env.geekTime.home;
 const cookie = env.geekTime.cookie;
 const unirest = require('unirest');
 const puppeteer = require('puppeteer');
@@ -38,7 +41,7 @@ router.get('/crawl-columns', async (req, res) => {
 async function main(columnIds = []) {
     if (columnIds && columnIds.length > 0) {
         for (let i = 0; i < columnIds.length; i++) {
-            const id = columnIds[i];
+            const id = parseInt(columnIds[i]);
             const column = await getColumn(id);
             await crawl(column);
         }
@@ -86,8 +89,13 @@ async function listColumns(page, size) {
             }
 
             const body = JSON.parse(res.raw_body);
+            if (body.error && body.error.code) {
+                console.error(`list columns error, req: page = ${page}, size = ${size}`, body.error.msg);
+                throw new Error(body.error.msg);
+            }
+
             const products = body.data.products || [];
-            more = body.data.pate.more;
+            more = body.data.page.more;
 
             products.forEach(product => {
                 // I guess
@@ -124,13 +132,18 @@ async function getColumn(id) {
     let column;
     await unirest('POST', 'https://time.geekbang.com/serv/v3/column/info')
         .headers({
-            'Referer': refer,
+            'Origin': home,
             'Content-Type': 'application/json',
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
             'Cookie': cookie,
         })
         .send(JSON.stringify({"product_id": id, "with_recommend_article": true}))
         .then(function (res) {
+            if (res.error) {
+                console.error(`get columns error, req: id = ${id}`, res.error);
+                throw new Error(res.error);
+            }
+
             const body = JSON.parse(res.raw_body);
             if (body.error && body.error.code) {
                 console.error(`get column error, req: id = ${id}`, body.error);
@@ -210,17 +223,17 @@ async function crawl(column) {
 }
 
 async function getColumnFromDB(columnId) {
-    const rows = await pool.awaitQuery('select * from geek_column where id = ?', [columnId]);
+    const rows = await pool.awaitQuery('select * from `column` where id = ?', [columnId]);
     return rows[0];
 }
 
 async function insertColumn(column) {
-    await pool.awaitQuery('insert into geek_column set ?', column);
+    await pool.awaitQuery('insert into `column` set ?', column);
     console.log('insert column success', column.id, column.title);
 }
 
 async function updateColumn(column) {
-    await pool.awaitQuery('update geek_column set ? where id = ?', [column, column.id]);
+    await pool.awaitQuery('update `column` set ? where id = ?', [column, column.id]);
     console.log('update column success', column.id, column.title);
 }
 
@@ -242,6 +255,11 @@ async function listChapters(columnId) {
             }
 
             const body = JSON.parse(res.raw_body);
+            if (body.error && body.error.code) {
+                console.error(`list chapters error, req: columnId = ${columnId}`, body.error.msg);
+                throw new Error(body.error.msg);
+            }
+
             const items = body.data || [];
             for (let i = 0; i < items.length; i++) {
                 const item = items[i];
@@ -258,10 +276,10 @@ async function listChapters(columnId) {
 }
 
 async function saveChapter(chapter) {
-    const rows = await pool.awaitQuery('select count(*) as num from geek_chapter where id = ?', [chapter.id]);
+    const rows = await pool.awaitQuery('select count(*) as num from chapter where id = ?', [chapter.id]);
     const notFound = rows[0].num === 0;
     if (notFound) {
-        await pool.awaitQuery('insert into geek_chapter set ?', chapter);
+        await pool.awaitQuery('insert into chapter set ?', chapter);
         console.log('insert chapter success', chapter.id, chapter.column_id, chapter.title, chapter.rank);
     }
 }
@@ -303,7 +321,7 @@ async function crawlArticle(articleId) {
 }
 
 async function getArticleFromDB(articleId) {
-    const rows = await pool.awaitQuery('select * from geek_article where id = ?', [articleId]);
+    const rows = await pool.awaitQuery('select * from article where id = ?', [articleId]);
     return rows[0];
 }
 
@@ -328,9 +346,9 @@ async function getArticle(articleId) {
             }
 
             const body = JSON.parse(res.raw_body);
-            if (body.code === -1) {
-                console.log(`get article error, cookie expire, req: articleId = ${articleId}`);
-                throw new Error('cookie expire');
+            if (body.error && body.error.code) {
+                console.log(`get article error, req: articleId = ${articleId}`, body.error.msg);
+                throw new Error(body.error.msg);
             }
 
             const geekArticle = body.data;
@@ -353,13 +371,13 @@ async function getArticle(articleId) {
 }
 
 async function saveArticle(article) {
-    const rows = await pool.awaitQuery('select count(*) as num from geek_article where id = ?', [article.id]);
+    const rows = await pool.awaitQuery('select count(*) as num from article where id = ?', [article.id]);
     const notFound = rows[0].num === 0;
     if (notFound) {
-        await pool.awaitQuery('insert into geek_article set ?', article);
+        await pool.awaitQuery('insert into article set ?', article);
         console.log('insert article success', article.column_id, article.id, article.title);
     } else {
-        await pool.awaitQuery('update geek_article set ? where id = ?', [article, article.id]);
+        await pool.awaitQuery('update article set ? where id = ?', [article, article.id]);
         console.log('update article success', article.column_id, article.id, article.title);
     }
 }
