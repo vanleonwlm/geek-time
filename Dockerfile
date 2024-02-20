@@ -1,5 +1,5 @@
 # 使用官方的 Node 镜像作为基础镜像
-FROM node:latest
+FROM --platform=linux/amd64 node:latest
 
 # 在容器内创建一个目录用于存放 Node.js 应用程序
 RUN mkdir -p /app
