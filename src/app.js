@@ -8,8 +8,8 @@ app.use(middlewares);
 app.use(router);
 
 app.listen(process.env.PORT, () => {
-    console.log('geek-time is running...');
     console.log('env:', process.env);
+    console.log('geek-time is running...');
 });
 
 process.on('uncaughtException', (err) => {
