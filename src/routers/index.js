@@ -8,7 +8,8 @@ const crawlerRouter = require('./crawler.router');
 const markdownRouter = require('./markdown.router');
 
 router.get('/', (req, res) => {
-    res.redirect('/columns');
+    req.url = '/columns';
+    app.handle(req, res);
 });
 
 app.use(router);
