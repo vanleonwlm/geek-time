@@ -17,4 +17,11 @@ const db = mysql2.createPool({
     keepAliveInitialDelay: 0,
 });
 
+db.query('select 1+1 as result', (err, result) => {
+    if (err) {
+        throw err;
+    }
+    console.log('connect to database success...');
+});
+
 module.exports = db;
