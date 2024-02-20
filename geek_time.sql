@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS geek_time CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS geek_time CHARACTER SET utf8mb4;
 
 USE geek_time;
 
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `article` (
   `chapter_id` bigint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `idx_column_id_create_time` (`column_id`,`create_time`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `chapter` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `chapter` (
   `column_id` bigint NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_column_id_rank` (`column_id`,`rank`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `column` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `column` (
   `is_finish` char(1) NOT NULL DEFAULT 'N',
   PRIMARY KEY (`id`),
   FULLTEXT KEY `idx_title` (`title`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `simple_session` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -62,4 +62,4 @@ CREATE TABLE IF NOT EXISTS `simple_session` (
   `user_agent` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_token` (`token`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
