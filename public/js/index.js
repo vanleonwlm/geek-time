@@ -141,31 +141,36 @@ function renderOutline() {
         return;
     }
 
-    const elements = document.querySelectorAll("h2");
-    if (elements && elements.length > 0) {
-        // 显示大纲
-        document.querySelector('.page-nav').style.display = 'block';
+    const titleTags = ['.Markdown h1', '.Markdown h2', '.Markdown h3', '.Markdown h4'];
+    for (const titleTag of titleTags) {
+        const elements = document.querySelectorAll(titleTag);
+        if (elements && elements.length > 0) {
+            // 显示大纲
+            document.querySelector('.page-nav').style.display = 'block';
+    
+            for (const element of elements) {
+                const h2Title = element.innerText;
+    
+                // 创建大纲节点
+                const a = document.createElement("a");
+                a.setAttribute('class', 'item')
+                a.setAttribute('href', "#" + h2Title);
+                a.innerText = h2Title;
+                navElement.appendChild(a);
+    
+                // 修改h2标题，增加锚点
+                element.innerHTML = `
+                    <h2 class="Heading"><a class="Anchor" aria-hidden="true" id="${h2Title}" href="#${h2Title}">
+                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                        </svg>
+                        </a>${h2Title}
+                    </h2>
+                `;
+            }
 
-        for (const element of elements) {
-            const h2Title = element.innerText;
-
-            // 创建大纲节点
-            const a = document.createElement("a");
-            a.setAttribute('class', 'item')
-            a.setAttribute('href', "#" + h2Title);
-            a.innerText = h2Title;
-            navElement.appendChild(a);
-
-            // 修改h2标题，增加锚点
-            element.innerHTML = `
-                <h2 class="Heading"><a class="Anchor" aria-hidden="true" id="${h2Title}" href="#${h2Title}">
-                    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
-                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                    </svg>
-                    </a>${h2Title}
-                </h2>
-            `;
+            break;
         }
     }
 }
