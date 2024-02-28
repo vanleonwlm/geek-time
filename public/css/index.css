@@ -4542,6 +4542,10 @@ ol li p {
     display: inline;
 }
 
+ul li p {
+    display: inline;
+}
+
 @media screen and (max-width: 1150px) {
     .min-column-header {
         display: block;
