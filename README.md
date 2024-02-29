@@ -1,31 +1,14 @@
 # 极客时间
 
+## Ready
+
+通过 `.env` 文件修改运行配置。
+
+使用 `geek_time.sql` 文件来创建数据库、表和初始化数据。
+
 ## Node
 
-```javascript
+```bash
 npm install
 npm start
-```
-
-## Docker
-
-### build
-
-```bash
-docker build -t vanleon/geek-time:1.0.0 .
-docker push vanleon/geek-time:1.0.0
-```
-
-### run
-
-```bash
-docker pull vanleon/geek-time:1.0.0
-docker run \
-    -e MYSQL_HOST=YOUR_MYSQL_HOST \
-    -e MYSQL_PORT=YOUR_MYSQL_PORT \
-    -e MYSQL_USER=YOUR_MYSQL_USER \
-    -e MYSQL_PASSWORD=YOUR_MYSQL_PASSWORD \
-    -e MYSQL_DATABASE=geek_time \
-    -p 4000:4000 \
-    vanleon/geek-time:1.0.0
 ```
