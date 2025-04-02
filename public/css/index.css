@@ -4563,3 +4563,7 @@ ul li p {
         display: none;
     }
 }
+
+video {
+    width: 100%;
+}
