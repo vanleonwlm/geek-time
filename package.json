@@ -1,7 +1,7 @@
 {
   "name": "geek-time",
   "version": "1.0.0",
-  "description": "",
+  "description": "A web application for crawling and managing GeekTime content with Express, MySQL, and Puppeteer",
   "type": "module",
   "main": "src/app.js",
   "scripts": {
