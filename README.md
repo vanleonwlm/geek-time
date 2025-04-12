@@ -6,7 +6,7 @@
 
 使用 `geek_time.sql` 文件来创建数据库、表和初始化数据。
 
-## Node
+## Run
 
 ```bash
 npm install

@@ -1,5 +1,6 @@
-const nunjucks = require('nunjucks');
-const env = require('./base.config');
-nunjucks.configure(env.nunjucksTemplatePath, {autoescape: false});
+import nunjucks from 'nunjucks';
+nunjucks.configure('public', {
+    autoescape: false
+});
 
-module.exports = nunjucks;
+export default nunjucks;  

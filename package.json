@@ -1,28 +1,30 @@
 {
   "name": "geek-time",
   "version": "1.0.0",
-  "description": "Crawler and preview service for Geek Time",
+  "description": "",
+  "type": "module",
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
+    "spider": "node src/spider.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "vanleon",
   "license": "ISC",
   "dependencies": {
     "async": "^3.2.5",
+    "axios": "^1.8.4",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.2",
     "express": "^4.18.2",
     "express-async-errors": "^3.1.1",
     "moment": "^2.30.1",
-    "mysql-await": "^2.2.3",
-    "mysql2": "^3.6.5",
+    "mysql2": "^3.14.0",
     "nunjucks": "^3.2.4",
     "puppeteer": "^22.0.0",
-    "turndown": "^7.1.2",
-    "unirest": "^0.6.0"
+    "sequelize": "^6.37.7",
+    "turndown": "^7.1.2"
   },
   "devDependencies": {
     "nodemon": "^3.0.3"

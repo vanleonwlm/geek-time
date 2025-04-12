@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
+
 const app = express();
-const env = require('../configs/base.config')
 
 const options = {
     dotfiles: 'ignore',
@@ -14,6 +14,6 @@ const options = {
     }
 };
 
-app.use(express.static(env.staticDirPath, options));
+app.use(express.static('public', options));
 
-module.exports = app;
+export default app;

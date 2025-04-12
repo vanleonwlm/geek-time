@@ -1,36 +1,22 @@
-const articleModel = require('../models/article.model');
-const columnService = require('./column.service');
+import columnService from "./column.service.js";
+import Article from "../models/article.model.js";
 
-module.exports = {
-    get: (id, callback) => {
-        articleModel.get(id, (err, article) => {
-            if (err) {
-                callback(err, null);
-                return;
-            }
+const get = async (id) => {
+    const _article = await Article.get(id);
+    const article = _article.get({ plain: true });
 
-            if (!article) {
-                callback(new Error('article is not exist'), null);
-                return;
-            }
+    if (!article) {
+        throw new Error(`Article not found: ${id}`);
+    }
 
-            const columnId = article.column_id;
-            columnService.get(columnId, (err, column) => {
-                if (err) {
-                    callback(err, null);
-                    return;
-                }
+    const column = await columnService.get(article.columnId);
+    const articles = getArticles(column);
+    
+    article.column = column;
+    article.prev = getPrevArticle(id, articles);
+    article.next = getNextArticle(id, articles);
 
-                article.column = column;
-
-                const articles = getArticles(column);
-                article.prev = getPrevArticle(id, articles);
-                article.next = getNextArticle(id, articles);
-
-                callback(null, article);
-            })
-        });
-    },
+    return article;
 }
 
 const getArticles = (column) => {
@@ -71,4 +57,8 @@ const findArticleIndex = (id, articles) => {
         }
     }
     return -1;
+}
+
+export default {
+    get
 }

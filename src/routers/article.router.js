@@ -1,20 +1,13 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const nunjucks = require('../configs/nunjucks.config');
+import articleService from '../services/article.service.js';
+import nunjucks from '../configs/nunjucks.config.js';
 
-const articleService = require('../services/article.service');
-
-router.get('/articles/:id', (req, res) => {
+router.get('/articles/:id', async (req, res) => {
     const id = Number.parseInt(req.params.id);
-    articleService.get(id, (err, article) => {
-        if (err) {
-            res.send({error: err.message});
-            return;
-        }
-
-        const html = nunjucks.render('article.html', article);
-        res.send(html);
-    });
+    const article = await articleService.get(id);
+    const html = nunjucks.render('article.html', article);
+    res.send(html);
 });
 
-module.exports = router;
+export default router;

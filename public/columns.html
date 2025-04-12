@@ -16,7 +16,7 @@
     <div class="content">
         {% for column in columns %}
         <article class="mb-20">
-            <div class="text-2 weight-6">{{ column.create_time }}</div>
+            <div class="text-2 weight-6">{{ column.createTimeYMD }}</div>
             <h2 class="title-3 mt-4">{{ column.title }}</h2>
             {% if column.intro %}
             <p class="small mt-6">

@@ -1,9 +1,7 @@
-const express = require('express');
-const app = express();
-const cookieParser = require('cookie-parser');
-const staticMiddleware = require('./static.middleware');
+import staticMiddleware from './static.middleware.js';
 
-app.use(cookieParser());
-app.use(staticMiddleware);
+const registerMiddlewares = (app) => {
+  app.use(staticMiddleware);
+};
 
-module.exports = app;
+export default registerMiddlewares;

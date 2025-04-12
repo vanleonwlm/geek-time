@@ -1,21 +1,10 @@
-const express = require('express');
-const app = express();
-const router = express.Router();
 
-const columnRouter = require('./column.router');
-const articleRouter = require('./article.router');
-const crawlerRouter = require('./crawler.router');
-const markdownRouter = require('./markdown.router');
+import columnRouter from './column.router.js';
+import articleRouter from './article.router.js';
 
-router.get('/', (req, res) => {
-    req.url = '/columns';
-    app.handle(req, res);
-});
+const registerRoutes = (app) => {
+    app.use('/', columnRouter);
+    app.use('/', articleRouter);
+};
 
-app.use(router);
-app.use('/', columnRouter);
-app.use('/', articleRouter);
-app.use('/', crawlerRouter);
-app.use('/', markdownRouter);
-
-module.exports = app;
+export default registerRoutes;
