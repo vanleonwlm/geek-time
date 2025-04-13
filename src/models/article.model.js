@@ -96,8 +96,12 @@ Article.fromGeekTime = function (geekTimeArticle, columnForm) {
 
 Article.fromGeekTimeVideo = function (geekTimeArticle) {
     const info = geekTimeArticle.info;
+    if (!info.title) {
+        return null;
+    }
+
     const product = geekTimeArticle.product;
-    const m3u8 = info.video_preview.medias[0].url;
+    const m3u8 = info?.video_preview?.medias?.[0]?.url;
 
     return Article.build({
         id: info.id,
@@ -117,6 +121,10 @@ Article.fromGeekTimeVideo = function (geekTimeArticle) {
 }
 
 Article.fromGeekTimeArticle = function (geekTimeArticle) {
+    if (!geekTimeArticle.article_title) {
+        return null;
+    }
+
     const hasAudio = geekTimeArticle.audio_download_url ? 'Y' : 'N';
     const audio = {};
     if (hasAudio === 'Y') {

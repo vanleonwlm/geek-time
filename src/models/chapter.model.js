@@ -36,6 +36,11 @@ const Chapter = sequelize.define('Chapter', {
         allowNull: false,
         field: 'rank'
     },
+    sourceId: {
+        type: DataTypes.BIGINT,
+        allowNull: true,
+        field: 'source_id'
+    },
     columnId: {
         type: DataTypes.BIGINT,
         allowNull: false,
@@ -50,6 +55,7 @@ Chapter.fromGeekTime = function (geekTimeChapter, rank, columnId) {
         id: geekTimeChapter.id,
         title: geekTimeChapter.title,
         rank: rank,
+        sourceId: geekTimeChapter.source_id,
         columnId: columnId
     });
 };
@@ -65,13 +71,16 @@ Chapter.save = async function (chapter) {
     if (row) {
         await row.update({
             title: chapter.title,
-            rank: chapter.rank
+            rank: chapter.rank,
+            sourceId: chapter.sourceId,
+            columnId: chapter.columnId
         });
     } else {
         await Chapter.create({
             id: chapter.id,
             title: chapter.title,
             rank: chapter.rank,
+            sourceId: chapter.sourceId,
             columnId: chapter.columnId
         });
     }

@@ -15,6 +15,7 @@ class GeekTimeSpider {
             retryDelay: 5000,
             batchSize: 20,
             columnIds: [],
+            skipColumnIfFinish: false,
             skipArticleIfExists: false,
             ...config
         };
@@ -97,7 +98,17 @@ class GeekTimeSpider {
             
             console.log('----------------------------------------------------------------');
 
+            if (this.config.skipColumnIfFinish) {
+                const column = await Column.get(geekTimeColumn.id);
+                if (column && column.isFinish === 'Y') {
+                    console.log(`Column is finished, skipping, id: ${geekTimeColumn.id}, title: ${geekTimeColumn.title}`);
+                    return;
+                }
+            }
+
             const column = Column.fromGeekTime(geekTimeColumn);
+            const isFinish = column.isFinish;
+            column.isFinish = 'N';
             await Column.save(column);
             console.log(`Processing column, id: ${column.id}, title: ${column.title}`);
 
@@ -118,6 +129,9 @@ class GeekTimeSpider {
             } else {
                 throw new Error(`Failed to fetch chapters: ${listChaptersResponse.error.msg || 'unknown error'}`);
             }
+
+            column.isFinish = isFinish;
+            await Column.save(column);
         } catch (error) {
             console.error(`Failed to spider column ${geekTimeColumn.id}:`, error);
             throw error;
@@ -192,6 +206,10 @@ class GeekTimeSpider {
             if (geekTimeArticleResponse.code === 0) {
                 const geekTimeArticle = geekTimeArticleResponse.data;
                 const article = Article.fromGeekTime(geekTimeArticle, columnForm);
+                if (!article) {
+                    console.warn(`Article ${articleId} is not a valid article, skipping`);
+                    return;
+                }
                 await this.parseVideoM3u8(article, geekTimeArticle);
                 await Article.save(article);
                 console.log(`Processed article, id: ${article.id}, title: ${article.title}`);
@@ -212,7 +230,7 @@ class GeekTimeSpider {
             return
         }
         
-        const m3u8 = geekTimeArticle.info.video_preview.medias[0].url;
+        const m3u8 = geekTimeArticle?.info?.video_preview?.medias?.[0]?.url;
         // TODO
     }
 }

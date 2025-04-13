@@ -7,6 +7,7 @@
     <meta name="referrer" content="no-referrer"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" type="text/css" href="/css/index.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 
 <body>
@@ -40,7 +41,15 @@
             <div class="Markdown">
                 <html>
                 <body>
+                {% if videoM3u8 %}
+                <div class="video-m3u8">
+                    <video id="videoM3u8" controls muted playsinline autoplay></video>
+                </div>
+                {% endif %}
+
+                {% if contentHtml %}
                 {{ contentHtml }}
+                {% endif %}
                 </body>
                 </html>
             </div>
@@ -107,6 +116,18 @@
 {% include "section/footer.html" %}
 
 <script importance="low" src="/js/index.js"></script>
+
+<script>
+    const video = document.getElementById('videoM3u8');
+    if (video) {
+        const hls = new Hls();
+        hls.loadSource('{{ videoM3u8 }}');
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            video.play();
+        });
+    }
+</script>
 </body>
 
 </html>

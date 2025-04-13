@@ -54,7 +54,8 @@ const assembleColumn = (column, chapters, articles) => {
         });
 
         result.chapters = chapters.map(chapter => {
-            chapter.articles = chapterIdToArticles.get(chapter.id) || [];
+            const chapterId = column.isVideo === 'Y' ? chapter.sourceId : chapter.id;
+            chapter.articles = chapterIdToArticles.get(chapterId) || [];
             return chapter;
         });
     }

@@ -4567,3 +4567,7 @@ ul li p {
 video {
     width: 100%;
 }
+
+.video-m3u8 {
+    margin-top: 24px;
+}
