@@ -21,8 +21,10 @@
                 <div><p>{{ column.tags }}</p></div>
             </div>
         </div>
+        {% if column.cover.transparent %}
         <div>
             <img src="{{ column.cover.transparent }}" style="width: 334px; height: 334px;">
         </div>
+        {% endif %}
     </div>
 </div>

@@ -43,7 +43,11 @@
                 <body>
                 {% if videoM3u8 %}
                 <div class="video-m3u8">
-                    <video id="videoM3u8" controls muted playsinline autoplay></video>
+                    <video id="videoM3u8" 
+                        controls 
+                        playsinline
+                        preload="none" 
+                        poster="/image/doge.png"/>
                 </div>
                 {% endif %}
 
@@ -124,7 +128,7 @@
         hls.loadSource('{{ videoM3u8 }}');
         hls.attachMedia(video);
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            video.play();
+            // video.play();
         });
     }
 </script>
