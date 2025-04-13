@@ -20,7 +20,7 @@ class GeekTimeService {
     async listColumns(page = 1, size = 20) {
         const url = `${this.baseUrl}/serv/v4/pvip/product_list`;
         const data = {
-            prev: page,
+            prev: page - 1,
             size: size,
             tag_ids: [],
             product_type: 0,
@@ -59,6 +59,19 @@ class GeekTimeService {
         return this.http.post(url, data, this.headers);
     }
 
+    /**
+     * 获取文章信息
+     * 
+     * 使用product_type区分专栏和视频课
+     * 专栏课地址：https://time.geekbang.com/column/intro/101023401 v1
+     * 视频课地址：https://time.geekbang.com/course/intro/101000501 v3
+     * 公开课地址：https://time.geekbang.com/opencourse/videointro/100838801 v3 product_type=4
+     * 
+     * 
+     * @param {*} articleId 文章ID
+     * @param {*} columnForm 专栏类型
+     * @returns 
+     */
     async getArticle(articleId, columnForm) {
         const url = columnForm === COLUMN_FORMS.video
             ? `${this.baseUrl}/serv/v3/article/info`

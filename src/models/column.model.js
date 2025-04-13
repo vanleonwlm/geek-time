@@ -89,14 +89,14 @@ const Column = sequelize.define('Column', {
 
 Column.fromGeekTime = function (geekTimeColumn) {
     const isVideo = geekTimeColumn.is_video || geekTimeColumn.is_video === true ? 'Y' : 'N';
-    const isFinish = geekTimeColumn.is_finish || geekTimeColumn.is_finish === true ? 'Y' : 'N';
+    const isFinish = geekTimeColumn.is_finish ? 'Y' : 'N';
     const form = isVideo === 'Y' ? COLUMN_FORMS.video : COLUMN_FORMS.article;
     const type = PRODUCT_TYPE_TO_COLUMN_TYPE_MAPPING[`${geekTimeColumn.column_type}`] ? PRODUCT_TYPE_TO_COLUMN_TYPE_MAPPING[`${geekTimeColumn.column_type}`] : geekTimeColumn.column_type;
 
     return Column.build({
         id: geekTimeColumn.id,
-        createTime: moment(geekTimeColumn.begin_time * 1000).format('YYYY-MM-DD HH:mm:ss'),
-        updateTime: moment(geekTimeColumn.end_time * 1000).format('YYYY-MM-DD HH:mm:ss'),
+        createTime: moment(geekTimeColumn.ctime * 1000).format('YYYY-MM-DD HH:mm:ss'),
+        updateTime: moment(geekTimeColumn.utime * 1000).format('YYYY-MM-DD HH:mm:ss'),
         title: geekTimeColumn.title,
         subtitle: geekTimeColumn.subtitle,
         intro: geekTimeColumn.intro,
