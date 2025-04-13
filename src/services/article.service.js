@@ -4,7 +4,6 @@ import Article from "../models/article.model.js";
 const get = async (id) => {
     const _article = await Article.get(id);
     const article = _article.get({ plain: true });
-
     if (!article) {
         throw new Error(`Article not found: ${id}`);
     }
@@ -15,6 +14,10 @@ const get = async (id) => {
     article.column = column;
     article.prev = getPrevArticle(id, articles);
     article.next = getNextArticle(id, articles);
+
+    if (article.hasAudio === 'Y') {
+        article.audio = JSON.parse(article.audioJson);
+    }
 
     return article;
 }

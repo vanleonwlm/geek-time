@@ -1,0 +1,198 @@
+<style type="text/css">
+    .audio-player {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        max-width: 800px;
+        margin: 20px auto;
+    }
+
+    .audio-player-controls {
+        display: flex;
+        align-items: center;
+    }
+
+    .audio-player-play-pause-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: none;
+        background-color: #ff6b00;
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .audio-player-play-pause-btn:hover {
+        background-color: #ff8533;
+    }
+
+    .audio-player-info {
+        display: flex;
+        gap: 20px;
+        color: #666;
+        font-size: 14px;
+    }
+
+    .progress-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #ff6b00;
+        transform-origin: left;
+        transform: scaleX(0);
+    }
+
+    .time-display {
+        position: absolute;
+        top: -24px;
+        right: 8px;
+        color: #666;
+        font-size: 14px;
+    }
+
+    .playback-speed {
+        position: absolute;
+        top: 50%;
+        right: 16px;
+        transform: translateY(-50%);
+        color: #666;
+        font-size: 14px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="audio-player" id="audioPlayer" src="{{ audio.downloadUrl }}">
+    <div class="audio-player-controls">
+        <button class="audio-player-play-pause-btn" id="playPauseBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="play-icon">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+        </button>
+    </div>
+    <div class="audio-player-info">
+        <span>讲述：<span id="narrator">{{ audio.dubber }}</span></span>
+        <span>大小：<span id="fileSize">{{ audio.size / 1000}}K</span></span>
+        <span>时长：<span id="duration">{{ audio.time }}</span></span>
+    </div>
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="time-display" id="timeDisplay">00:00</div>
+    <div class="playback-speed" id="playbackSpeed">1.0×</div>
+</div>
+
+<script type="text/javascript">
+    class AudioPlayer {
+        constructor() {
+            this.audioElement = new Audio();
+            this.isPlaying = false;
+            this.playbackSpeed = 1.0;
+
+            // DOM Elements
+            this.playerElement = document.getElementById('audioPlayer');
+            this.playPauseBtn = document.getElementById('playPauseBtn');
+            this.progressBar = document.getElementById('progressBar');
+            this.timeDisplay = document.getElementById('timeDisplay');
+            this.playbackSpeedElement = document.getElementById('playbackSpeed');
+
+            this.initializeEventListeners();
+        }
+
+        initializeEventListeners() {
+            // Play/Pause button click
+            this.playPauseBtn.addEventListener('click', () => this.togglePlayPause());
+
+            // Playback speed click
+            this.playbackSpeedElement.addEventListener('click', () => this.togglePlaybackSpeed());
+
+            // Audio time update
+            this.audioElement.addEventListener('timeupdate', () => this.updateProgress());
+
+            // Audio ended
+            this.audioElement.addEventListener('ended', () => this.onAudioEnded());
+        }
+
+        togglePlayPause() {
+            if (this.isPlaying) {
+                this.pause();
+            } else {
+                this.play();
+            }
+        }
+
+        play() {
+            this.audioElement.play();
+            this.isPlaying = true;
+            this.updatePlayPauseButton();
+        }
+
+        pause() {
+            this.audioElement.pause();
+            this.isPlaying = false;
+            this.updatePlayPauseButton();
+        }
+
+        updatePlayPauseButton() {
+            const icon = this.playPauseBtn.querySelector('svg');
+            if (this.isPlaying) {
+                icon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
+            } else {
+                icon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
+            }
+        }
+
+        togglePlaybackSpeed() {
+            const speeds = [1.0, 1.25, 1.5, 2.0];
+            const currentIndex = speeds.indexOf(this.playbackSpeed);
+            const nextIndex = (currentIndex + 1) % speeds.length;
+            this.playbackSpeed = speeds[nextIndex];
+
+            this.audioElement.playbackRate = this.playbackSpeed;
+            this.playbackSpeedElement.textContent = `${this.playbackSpeed.toFixed(1)}×`;
+        }
+
+        updateProgress() {
+            const currentTime = this.audioElement.currentTime;
+            const duration = this.audioElement.duration;
+
+            if (duration) {
+                // Update progress bar
+                const progress = (currentTime / duration) * 100;
+                this.progressBar.style.transform = `scaleX(${progress / 100})`;
+
+                // Update time display
+                const currentMinutes = Math.floor(currentTime / 60);
+                const currentSeconds = Math.floor(currentTime % 60);
+                const timeString = `${String(currentMinutes).padStart(2, '0')}:${String(currentSeconds).padStart(2, '0')}`;
+                this.timeDisplay.textContent = timeString;
+            }
+        }
+
+        onAudioEnded() {
+            this.isPlaying = false;
+            this.updatePlayPauseButton();
+            this.progressBar.style.transform = 'scaleX(0)';
+        }
+
+        loadAudio(url) {
+            this.audioElement.src = url;
+            this.audioElement.load();
+        }
+    }
+
+    // Initialize the audio player
+    const player = new AudioPlayer();
+
+    // For demo purposes, you can load an audio file like this:
+    const downloadUrl = document.getElementById('audioPlayer').getAttribute('src');
+    player.loadAudio(downloadUrl);
+</script>

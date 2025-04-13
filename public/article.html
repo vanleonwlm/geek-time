@@ -41,7 +41,7 @@
             <div class="Markdown">
                 <html>
                 <body>
-                {% if videoM3u8 %}
+                {% if isVideo == 'Y' and videoM3u8 %}
                 <div class="video-m3u8">
                     <video id="videoM3u8" 
                         controls 
@@ -49,6 +49,10 @@
                         preload="none" 
                         poster="/image/doge.png"/>
                 </div>
+                {% endif %}
+
+                {% if hasAudio == 'Y' and audio %}
+                {% include "section/audio-player.html" %}
                 {% endif %}
 
                 {% if contentHtml %}
