@@ -1,10 +1,10 @@
 -- -------------------------------------------------------------
--- TablePlus 6.4.2(600)
+-- TablePlus 6.4.4(604)
 --
 -- https://tableplus.com/
 --
 -- Database: geek_time
--- Generation Time: 2025-04-12 23:34:43.3510
+-- Generation Time: 2025-04-13 20:06:25.5660
 -- -------------------------------------------------------------
 
 
@@ -37,7 +37,7 @@ CREATE TABLE `article` (
   `chapter_id` bigint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `idx_column_id` (`column_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=868708 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=868905 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 DROP TABLE IF EXISTS `chapter`;
 CREATE TABLE `chapter` (
@@ -47,6 +47,7 @@ CREATE TABLE `chapter` (
   `is_delete` char(1) NOT NULL DEFAULT 'N',
   `title` varchar(64) NOT NULL,
   `rank` tinyint NOT NULL DEFAULT '1',
+  `source_id` bigint NOT NULL DEFAULT '0',
   `column_id` bigint NOT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_column_id` (`column_id`) USING BTREE
