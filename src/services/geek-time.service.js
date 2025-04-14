@@ -32,6 +32,12 @@ class GeekTimeService {
         return this.http.post(url, data, this.headers);
     }
 
+    async listDailyCourseColumns(prev = 0, size = 20) {
+        const url = `${this.baseUrl}/serv/v3/product/list`;
+        const data = { "type": "d", "size": size, "prev": prev, "orderby": "new" };
+        return this.http.post(url, data, this.headers);
+    }
+
     async getColumnInfo(productId) {
         const url = `${this.baseUrl}/serv/v3/column/info`;
         const data = {

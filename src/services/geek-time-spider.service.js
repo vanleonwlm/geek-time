@@ -5,6 +5,7 @@ import Chapter from '../models/chapter.model.js';
 import Article from '../models/article.model.js';
 import { GEEK_TIME_HOME } from '../configs/geek-time.config.js';
 import { random, sleep } from '../utils/common.utils.js';
+import { COLUMN_FORMS } from '../configs/column.config.js';
 
 class GeekTimeSpider {
     
@@ -14,6 +15,7 @@ class GeekTimeSpider {
             maxRetries: 3,
             retryDelay: 5000,
             batchSize: 20,
+            isSpiderDailyCourse: false,
             columnIds: [],
             skipColumnIfFinish: false,
             skipArticleIfExists: false,
@@ -38,7 +40,11 @@ class GeekTimeSpider {
                 headless: this.config.headless
             });
 
-            await this.spiderColumns(1, this.config.batchSize);
+            if (this.config.isSpiderDailyCourse) {
+                await this.spiderDailyCourseColumns();
+            } else {
+                await this.spiderColumns(1, this.config.batchSize);
+            }
         } catch (error) {
             console.error('Failed to start spider:', error);
             throw error;
@@ -88,6 +94,37 @@ class GeekTimeSpider {
             }
         } catch (error) {
             console.error(`Failed to spider columns page ${page}:`, error);
+            throw error;
+        }
+    }
+
+    async spiderDailyCourseColumns(prev = 0, size = 100) {
+        try {
+            const listDailyCourseColumnsResponse = await this.withRetry(() =>
+                GeekTimeService.listDailyCourseColumns(prev, size)
+            );
+
+            if (listDailyCourseColumnsResponse.code === 0) {
+                const geekTimeDailyCourseColumns = listDailyCourseColumnsResponse.data.list;
+                for (const [index, geekTimeDailyCourseColumn] of geekTimeDailyCourseColumns.entries()) {
+                    await this.simulateUserAccessGeekTimeHomePage(index);
+
+                    geekTimeDailyCourseColumn.is_video = true;
+                    await this.spiderColumn(geekTimeDailyCourseColumn);
+                    await this.spiderArticle(geekTimeDailyCourseColumn.article.id, 
+                        geekTimeDailyCourseColumn.id,
+                        COLUMN_FORMS.video);
+                }
+
+                const page = listDailyCourseColumnsResponse.data.page;
+                if (page.more) {
+                    await this.spiderDailyCourseColumns(page.source + 1, size);
+                }
+            } else {
+                throw new Error(`Failed to fetch daily course columns: ${listDailyCourseColumnsResponse.error.msg || 'unknown error'}`);
+            }
+        } catch (error) {
+            console.error('Failed to spider daily course columns:', error);
             throw error;
         }
     }

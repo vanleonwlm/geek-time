@@ -8,7 +8,8 @@ export const COLUMN_TYPES = {
     'system': 'system', // 体系课
     'public': 'public', // 公开课
     'offline': 'offline', // 线下大会
-    'community': 'community' // 社区课
+    'community': 'community', // 社区课
+    'daily': 'daily' // 每日一课
 };
 
 export const COLUMN_INFO_BG_URLS = [

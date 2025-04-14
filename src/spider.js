@@ -1,6 +1,7 @@
 import GeekTimeSpider from './services/geek-time-spider.service.js';
 
 const spider = new GeekTimeSpider({
+    isSpiderDailyCourse: false,
     columnIds: [],
     skipColumnIfFinish: false,
     skipArticleIfExists: false,
