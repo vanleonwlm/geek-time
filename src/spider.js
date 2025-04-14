@@ -1,9 +1,11 @@
 import GeekTimeSpider from './services/geek-time-spider.service.js';
 
 const spider = new GeekTimeSpider({
-    skipColumnIfFinish: true,
-    skipArticleIfExists: true,
-    columnIds: []
+    columnIds: [],
+    skipColumnIfFinish: false,
+    skipArticleIfExists: false,
+    productType: 0,
+    productForm: 0,
 });
 
 console.log('spider start');

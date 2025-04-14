@@ -17,6 +17,8 @@ class GeekTimeSpider {
             columnIds: [],
             skipColumnIfFinish: false,
             skipArticleIfExists: false,
+            productType: 0,
+            productForm: 0,
             ...config
         };
         this.browser = null;
@@ -68,7 +70,7 @@ class GeekTimeSpider {
     async spiderColumns(page = 1, size = 50) {
         try {
             const listColumnsResponse = await this.withRetry(() => 
-                GeekTimeService.listColumns(page, size)
+                GeekTimeService.listColumns(page, size, this.config.productType, this.config.productForm)
             );
 
             if (listColumnsResponse.code === 0) {

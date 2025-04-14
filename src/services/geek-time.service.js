@@ -17,14 +17,14 @@ class GeekTimeService {
         };
     }
 
-    async listColumns(page = 1, size = 20) {
+    async listColumns(page = 1, size = 20, productType = 0, productForm = 0) {
         const url = `${this.baseUrl}/serv/v4/pvip/product_list`;
         const data = {
             prev: page - 1,
             size: size,
             tag_ids: [],
-            product_type: 0,
-            product_form: 0,
+            product_type: productType,
+            product_form: productForm,
             pvip: 0,
             sort: 1,
             with_articles: false
