@@ -227,11 +227,14 @@ class GeekTimeSpider {
             const page = await this.browser.newPage();
             try {
                 await this.withRetry(() => 
-                    page.goto(GEEK_TIME_HOME)
+                    page.goto(GEEK_TIME_HOME, {
+                        timeout: 60000,
+                        waitUntil: 'networkidle0'
+                    })
                 );
             } catch (error) {
                 console.error('Failed to access home page:', error);
-                throw error;
+                console.warn('Continuing despite home page access failure');
             } finally {
                 await page.close();
             }
