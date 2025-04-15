@@ -17,6 +17,9 @@ const get = async (id) => {
 
     if (article.hasAudio === 'Y') {
         article.audio = JSON.parse(article.audioJson);
+        article.audio.sizeDescription = article.audio.size / 1000000 > 1
+            ? `${(article.audio.size / 1000000).toFixed(2)}MB`
+            : `${(article.audio.size / 1000).toFixed(2)}KB`;
     }
 
     return article;
