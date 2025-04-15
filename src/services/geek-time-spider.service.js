@@ -226,7 +226,9 @@ class GeekTimeSpider {
         if (articleIndex % 5 === 0) {
             const page = await this.browser.newPage();
             try {
-                await page.goto(GEEK_TIME_HOME);
+                await this.withRetry(() => 
+                    page.goto(GEEK_TIME_HOME)
+                );
             } catch (error) {
                 console.error('Failed to access home page:', error);
                 throw error;
