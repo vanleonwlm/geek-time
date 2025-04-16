@@ -25,6 +25,11 @@ const get = async (id) => {
         Chapter.list(id),
         Article.list(id)
     ]);
+
+    if (!_column) {
+        return null;
+    }
+
     const column = _column.get({ plain: true });
     const chapters = _chapters.map(chapter => chapter.get({ plain: true }));
     const articles = _articles.map(article => article.get({ plain: true }));
