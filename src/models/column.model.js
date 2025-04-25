@@ -159,7 +159,10 @@ Column.list = async function () {
     return Column.findAll({
         where: {
             isDelete: 'N',
-        }
+        },
+        order: [
+            ['id', 'DESC']
+        ]
     });
 }
 
