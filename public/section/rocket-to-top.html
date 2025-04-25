@@ -63,7 +63,10 @@
         
         // 点击事件
         rocketButton.addEventListener('click', function() {
-            contentContainer.scrollIntoView({ behavior: 'smooth' });
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
     });
 </script>
