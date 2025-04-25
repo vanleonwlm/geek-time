@@ -19,9 +19,9 @@
         <div class="min-column-header mb-16">
             <h1>{{ title }}</h1>
             <div><p>{{ subtitle }}</p></div>
+            <div><p>{{ tags }}</p></div>
             <div class="mt-15">
                 <div><p>{{ author.name }} {{ author.intro }}</p></div>
-                <div><p>{{ tags }}</p></div>
             </div>
         </div>
         <div class="text-2 weight-6">{{ createTimeYMD }}</div>
@@ -54,6 +54,7 @@
         {% endfor %}
         {% endif %}
 
+        {% include "section/rocket-to-top.html" %}
     </div>
 </div>
 

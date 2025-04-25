@@ -1,0 +1,69 @@
+<style>
+    .rocket-to-top {
+        position: fixed;
+        right: max(20px, calc((100% - min(1200px, 100% - 40px)) / 2 + 20px));
+        bottom: 50px;
+        width: 44px;
+        height: 44px;
+        background-color: rgb(73 80 87 / 20%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1000;
+        box-shadow: 0 4px 12px rgba(24, 144, 255, 0.2);
+        transform: translateY(10px);
+        backdrop-filter: blur(4px);
+    }
+    .rocket-to-top.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .rocket-to-top:hover {
+        background-color: rgb(73 80 87 / 50%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(24, 144, 255, 0.3);
+    }
+    .rocket-icon {
+        width: 24px;
+        height: 24px;
+        color: white;
+        transform: rotate(-45deg) scale(0.9);
+        transition: all 0.3s ease;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+    }
+    .rocket-to-top:hover .rocket-icon {
+        transform: rotate(-45deg) translateY(-2px) scale(1);
+    }
+</style>
+
+<div class="rocket-to-top" id="rocketToTop">
+    <svg class="rocket-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L4 12H9L12 8L15 12H20L12 2Z" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const rocketButton = document.getElementById('rocketToTop');
+        const contentContainer = document.querySelector('.content');
+        
+        // 监听滚动事件
+        window.addEventListener('scroll', function() {
+            const containerRect = contentContainer.getBoundingClientRect();
+            if (containerRect.top < 0) {
+                rocketButton.classList.add('visible');
+            } else {
+                rocketButton.classList.remove('visible');
+            }
+        });
+        
+        // 点击事件
+        rocketButton.addEventListener('click', function() {
+            contentContainer.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+</script>
