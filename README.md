@@ -1,6 +1,6 @@
 # 极客时间
 
-## Ready
+## 本地运行
 
 通过 `.env` 文件修改运行配置。
 
@@ -11,4 +11,27 @@
 ```bash
 npm install
 npm start
+```
+
+## Docker 运行
+
+本地构建并推送到远程仓库。
+
+```
+docker build -t vanleon/geek-time:1.0.4 -t vanleon/geek-time:latest .
+docker push vanleon/geek-time:1.0.4
+docker push vanleon/geek-time:latest
+```
+
+本地运行。
+```
+docker pull vanleon/geek-time:latest
+docker run \
+    -e MYSQL_HOST=YOUR_MYSQL_HOST \
+    -e MYSQL_PORT=YOUR_MYSQL_PORT \
+    -e MYSQL_USER=YOUR_MYSQL_USER \
+    -e MYSQL_PASSWORD=YOUR_MYSQL_PASSWORD \
+    -e MYSQL_DATABASE=geek_time \
+    -p 4000:4000 \
+    vanleon/geek-time:latest
 ```
