@@ -1,12 +1,13 @@
 import express from 'express';
-const router = express.Router();
 import columnService from '../services/column.service.js';
 import nunjucks from '../configs/nunjucks.config.js';
-import { parseInt } from '../utils/common.utils.js';
+import {parseInt, redirectErrorPage} from '../utils/common.utils.js';
+
+const router = express.Router();
 
 router.get(['/columns', '/'], async (req, res) => {
     const columns = await columnService.list();
-    const html = nunjucks.render('columns.html', { columns });
+    const html = nunjucks.render('columns.html', {columns});
     res.send(html);
 });
 
@@ -14,7 +15,7 @@ router.get('/columns/:id', async (req, res) => {
     const id = parseInt(req.params.id, 0);
     const column = await columnService.get(id);
     if (!column) {
-        res.status(404).send('Column not found');
+        redirectErrorPage(req, res, {message: '专栏不存在'})
         return;
     }
     column.column = column;
