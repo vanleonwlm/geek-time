@@ -16,8 +16,8 @@ npm start
 本地构建并推送到远程仓库。
 
 ```
-docker buildx build --platform linux/amd64 -t vanleon/geek-time:1.0.6 -t vanleon/geek-time:latest .
-docker push vanleon/geek-time:1.0.6
+docker buildx build --platform linux/amd64 -t vanleon/geek-time:1.0.7 -t vanleon/geek-time:latest .
+docker push vanleon/geek-time:1.0.7
 docker push vanleon/geek-time:latest
 ```
 
