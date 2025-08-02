@@ -2,7 +2,7 @@ import Column from '../models/column.model.js';
 import Chapter from '../models/chapter.model.js';
 import Article from '../models/article.model.js';
 import moment from 'moment';
-import { COLUMN_INFO_BG_URLS } from '../configs/column.config.js';
+import { COLUMN_INFO_BG_URLS, FREE_COLUMN_IDS } from '../configs/column.config.js';
 
 const list = async () => {
     const columns = [];
@@ -15,7 +15,7 @@ const list = async () => {
         column.author = author;
         columns.push(column);
     });
-    
+
     return columns;
 }
 
@@ -68,7 +68,26 @@ const assembleColumn = (column, chapters, articles) => {
     return result;
 }
 
+const isFreeColumn = (columnId) => {
+    return FREE_COLUMN_IDS.includes(columnId);
+}
+
+const canBrowseColumn = (req, res, columnId) => {
+    if (isFreeColumn(columnId)) {
+        return true;
+    }
+
+    const user = req.session.user;
+    if (!user) {
+        return false;
+    }
+
+    return user.isVip === 'Y';
+}
+
 export default {
     list,
-    get
+    get,
+    isFreeColumn,
+    canBrowseColumn,
 }

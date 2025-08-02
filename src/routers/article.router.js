@@ -2,6 +2,7 @@ import express from 'express';
 import articleService from '../services/article.service.js';
 import nunjucks from '../configs/nunjucks.config.js';
 import {parseInt, redirectErrorPage} from '../utils/common.utils.js';
+import columnService from "../services/column.service.js";
 
 const router = express.Router();
 
@@ -12,6 +13,13 @@ router.get('/articles/:id', async (req, res) => {
         redirectErrorPage(req, res, {message: '文章不存在'})
         return;
     }
+
+    const canBrows = columnService.canBrowseColumn(req, res, article.column.id);
+    if (!canBrows) {
+        redirectErrorPage(req, res, {message: '文章不存在'})
+        return;
+    }
+
     const html = nunjucks.render('article.html', article);
     res.send(html);
 });

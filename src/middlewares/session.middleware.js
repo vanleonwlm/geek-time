@@ -1,5 +1,6 @@
 import express from 'express';
 import session from 'express-session';
+import loginService from "../services/login.service.js";
 
 const app = express();
 
@@ -14,5 +15,10 @@ app.use(
         }
     })
 );
+
+app.use(async (req, res, next) => {
+    await loginService.refreshSession(req, res);
+    next();
+});
 
 export default app;

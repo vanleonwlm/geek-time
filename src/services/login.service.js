@@ -27,6 +27,16 @@ const login = async (req) => {
     return true;
 }
 
+const refreshSession = async (req, res) => {
+    const userSession = req.session.user;
+    if (!userSession) {
+        return;
+    }
+
+    const username = userSession.username;
+    req.session.user = await User.getByUsername(username);
+}
+
 export default {
-    login
+    login, refreshSession
 }

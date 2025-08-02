@@ -6,7 +6,10 @@ import {parseInt, redirectErrorPage} from '../utils/common.utils.js';
 const router = express.Router();
 
 router.get(['/columns', '/'], async (req, res) => {
-    const columns = await columnService.list();
+    let columns = await columnService.list();
+    columns = columns.filter(column => {
+        return columnService.canBrowseColumn(req, res, column.id);
+    });
     const html = nunjucks.render('columns.html', {columns});
     res.send(html);
 });
@@ -18,6 +21,13 @@ router.get('/columns/:id', async (req, res) => {
         redirectErrorPage(req, res, {message: '专栏不存在'})
         return;
     }
+
+    const canBrowse = columnService.canBrowseColumn(req, res, id);
+    if (!canBrowse) {
+        redirectErrorPage(req, res, {message: '专栏不存在'})
+        return;
+    }
+
     column.column = column;
     const html = nunjucks.render('column.html', column);
     res.send(html);

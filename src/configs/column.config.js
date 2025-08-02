@@ -19,3 +19,5 @@ export const COLUMN_INFO_BG_URLS = [
     'https://static001.geekbang.org/static/time/img/column-info-bg-4.950eba41.png',
     'https://static001.geekbang.org/static/time/img/column-info-bg-5.d770d38f.png',
 ];
+
+export const FREE_COLUMN_IDS = [100024801, 100057601, 100060101, 100064201, 100069501, 100082001, 100102001, 100310101, 100310901, 100548101, 100671401, 100841001];
