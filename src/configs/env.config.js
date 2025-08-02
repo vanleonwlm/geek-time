@@ -11,5 +11,11 @@ export default {
     },
     geekTime: {
         cookie: process.env.GEEK_TIME_COOKIE
+    },
+    github: {
+        oauth: {
+            clientId: process.env.GITHUB_OAUTH_CLIENT_ID,
+            clientSecret: process.env.GITHUB_OAUTH_CLIENT_SECRET
+        }
     }
 }
