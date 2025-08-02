@@ -11,6 +11,7 @@ await testConnection();
 registerMiddlewares(app);
 registerRoutes(app);
 
+app.set('trust proxy', true)
 app.listen(env.port, () => {
     console.log('geek-time is running...');
 });
