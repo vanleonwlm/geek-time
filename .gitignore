@@ -31,3 +31,9 @@ coverage
 
 package-lock.json
 
+#####
+
+.idea/
+.yarn/
+docker/mysql/data/
+docker/nginx/

@@ -1,4 +1,8 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
+import fs from 'fs';
+
+const envFile = fs.existsSync('.env.local') ? '.env.local' : '.env';
+dotenv.config({path: envFile});
 
 export default {
     port: process.env.PORT,

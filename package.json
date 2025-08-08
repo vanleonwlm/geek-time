@@ -5,9 +5,9 @@
   "type": "module",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
-    "spider": "node src/spider.js",
+    "start": "dotenv -e .env.local -- node src/app.js",
+    "dev": "dotenv -e .env.local -- nodemon src/app.js",
+    "spider": "dotenv -e .env.local -- node src/spider.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "vanleon",
@@ -28,6 +28,7 @@
     "turndown": "^7.1.2"
   },
   "devDependencies": {
+    "dotenv-cli": "^10.0.0",
     "nodemon": "^3.0.3"
   }
 }

@@ -1,0 +1,58 @@
+# noinspection SpellCheckingInspection
+services:
+  mysql:
+    image: mysql:8.0
+    ports:
+      - ${MYSQL_PORT}:${MYSQL_PORT}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    ports:
+      - ${PORT}:${PORT}
+    environment:
+      VIRTUAL_HOST: ${WEB_VIRTUAL_HOST}
+      LETSENCRYPT_HOST: ${WEB_VIRTUAL_HOST}
+      LETSENCRYPT_EMAIL: ${WEB_LETS_ENCRYPT_EMAIL}
+      PORT: ${PORT}
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      GITHUB_OAUTH_CLIENT_ID: ${GITHUB_OAUTH_CLIENT_ID}
+      GITHUB_OAUTH_CLIENT_SECRET: ${GITHUB_OAUTH_CLIENT_SECRET}
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
+      - "./docker/nginx/certs:/etc/nginx/certs:ro"
+      - "./docker/nginx/acme:/etc/acme.sh"
+      - "./docker/nginx/vhost:/etc/nginx/vhost.d"
+      - "./docker/nginx/html:/usr/share/nginx/html"
+
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    restart: always
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./docker/nginx/certs:/etc/nginx/certs:rw"
+    volumes_from:
+      - nginx-proxy
